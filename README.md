@@ -14,6 +14,14 @@ Script to scrap linkedin jobs
   Inside the source code, we are accesing the job information at some point and i am extracting the required skills information from the job posts.
   If you need to extract some other information from the job description, you can edit the code and achieve want you want.
 </p>
+
+<p>
+  You need to have Chrome and Chrome web driver to be able to use this tool.
+  The setup.py file will automatically install required libraries.
+  Setup.py will also attemp to find your Chrome version and download the compatible chrome driver for you.
+  Note: If setup.py fails to locate and get your chrome version information, then you will have to download it manually. In this scenario, you need to put your chromedriver.exe inside the same folder where setup.py and JobScrapper.py is.
+</p>
+
 <p>
   You can reach out to me for feedbacks and suggestions from melih.ekici4@gmail.com
 </p>
