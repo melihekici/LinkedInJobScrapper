@@ -56,7 +56,6 @@ class LinkedInScrapper:
         job_urls = []
         count = 0
         for job in jobs_list:
-            print(r"linkedin.com/jobs/view/"+job.split(';')[0])
             job_urls.append(r"https://www.linkedin.com/jobs/view/"+job.split(';')[0])
             count+=1
 
