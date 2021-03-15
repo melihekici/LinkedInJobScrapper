@@ -20,6 +20,10 @@ class LinkedInScrapper:
     def __seeAllJobs(self):
         url = "https://www.linkedin.com/jobs/search?keywords={}&location={}".format('%20'.join(self.searchTerm.split(' ')), self.jobLocation)
         self.driver.get(url)
+        language = self.driver.find_element_by_xpath("//button[contains(@class,'language-selector__button')]")
+        language.click()
+        language = self.driver.find_element_by_xpath("//button[contains(@data-tracking-control-name,'language-selector-en_US')]")
+        language.click()
         sleep(3)
         
         scroll_pause_time = 1 # You can set your own pause time. My laptop is a bit slow so I use 1 sec
@@ -47,28 +51,31 @@ class LinkedInScrapper:
     def __findJobUrls(self):
         response = self.driver.page_source
         self.driver.close()
-        jobs_list = response.split(r"https://tr.linkedin.com/jobs/view/")
+        jobs_list = response.split(r"linkedin.com/jobs/view/")
         jobs_list = jobs_list[1::]
         job_urls = []
         count = 0
         for job in jobs_list:
-            job_urls.append(r"https://tr.linkedin.com/jobs/view/"+job.split(';')[0])
+            print(r"linkedin.com/jobs/view/"+job.split(';')[0])
+            job_urls.append(r"https://www.linkedin.com/jobs/view/"+job.split(';')[0])
             count+=1
 
         return job_urls
 
     def __readJobUrl(self, job_url):
-        response = requests.get(job_url).content
+        headers = {"Accept-Language": "en-US,en;q=0.9"}
+        response = requests.get(job_url, headers=headers).content
         soup = BeautifulSoup(response, features="html.parser")
         return soup
 
     def __modifyText(self, soup):
         new_text = soup.find_all(text=True)
         try:
-            new_text = new_text[new_text.index('Bu iş ilanını rapor et')+1::]
-            new_text = new_text[:new_text.index('Daha fazla göster')]
+            new_text = new_text[new_text.index('Report this job')+1::]
+            new_text = new_text[:new_text.index('Show more')]
         except:
             pass
+
         new_text = ' '.join(new_text).lower()
         new_text = new_text.replace('\xa0', ' ')
         new_text = new_text.replace('"', ' ')
